@@ -1,7 +1,7 @@
 import UIKit
 
 open class Collection: UICollectionView, UICollectionViewDelegateFlowLayout {
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+    override public init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         create()
     }

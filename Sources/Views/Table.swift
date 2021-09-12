@@ -1,6 +1,15 @@
 import UIKit
 
 open class Table: UITableView {
+    public override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame, style: style)
+        create()
+    }
+    
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     lazy public var refresh: RefreshControl = RefreshControl()
     var items = [S]() //var sorting = [S]()
     
@@ -123,11 +132,6 @@ extension Table {
         public init(data: Any?) {
             self.data = data
         }
-    }
-    
-    convenience init() {
-        self.init()
-        create()
     }
 }
 
