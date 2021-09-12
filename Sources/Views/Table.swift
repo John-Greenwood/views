@@ -169,8 +169,8 @@ open class RoundedCell: TableCell {
         backgroundColor = .clear
         addSubview(box)
         addSubview(line)
-        box.translatesAutoresizingMaskIntoConstraints = true
-        line.translatesAutoresizingMaskIntoConstraints = true
+        box.translatesAutoresizingMaskIntoConstraints = false
+        line.translatesAutoresizingMaskIntoConstraints = false
         box.topAnchor.constraint(equalTo: topAnchor).isActive = true
         box.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         box.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
@@ -200,7 +200,7 @@ open class TableHeader: UIView {
     open func configure() {
         backgroundColor = .clear
         addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = true
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.heightAnchor.constraint(equalToConstant: 50).isActive = true
         label.topAnchor.constraint(equalTo: topAnchor).isActive = true
         label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
