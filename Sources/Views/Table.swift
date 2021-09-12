@@ -4,7 +4,7 @@ open class Table: UITableView {
     lazy public var refresh: RefreshControl = RefreshControl()
     var items = [S]() //var sorting = [S]()
     
-    @discardableResult
+    @discardableResult public
     func items(_ items: [S]) -> Self {
         self.items = items
         return self
@@ -97,13 +97,13 @@ extension Table {
         var items: [Table.I] = []
         var kind: Any?
         
-        init(name: String?, items: [Table.I], kind: Any?) {
+        public init(name: String?, items: [Table.I], kind: Any?) {
             self.name = name
             self.items = items
             self.kind = kind
         }
         
-        init(name: String?, items: [Table.I]) {
+        public init(name: String?, items: [Table.I]) {
             self.name = name
             self.items = items
         }
@@ -114,13 +114,13 @@ extension Table {
         var data: Any?
         var kind: Any?
         
-        init(id: String, data: Any?, kind: Any?) {
+        public init(id: String, data: Any?, kind: Any?) {
             self.id = id
             self.data = data
             self.kind = kind
         }
         
-        init(data: Any?) {
+        public init(data: Any?) {
             self.data = data
         }
     }
