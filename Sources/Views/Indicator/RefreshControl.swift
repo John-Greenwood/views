@@ -18,7 +18,7 @@ public class RefreshControl: UIRefreshControl {
         previuslyOffset = .zero
     }
     
-    weak var scrollView: UIScrollView? {
+    weak public var scrollView: UIScrollView? {
         willSet {
             removeObserving()
         }

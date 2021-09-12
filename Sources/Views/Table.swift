@@ -22,7 +22,7 @@ open class Table: UITableView {
         dataSource = self
     }
     
-    public func configure() {}
+    open func configure() {}
     
     func cellSetup(cell: TableCell, index: IndexPath) { }
     
@@ -73,20 +73,20 @@ open class Table: UITableView {
 }
 
 extension Table: UITableViewDelegate {
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { .leastNormalMagnitude }
-    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { .leastNormalMagnitude }
-    public func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat { .leastNormalMagnitude }
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { .leastNormalMagnitude }
+    open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { .leastNormalMagnitude }
+    open func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat { .leastNormalMagnitude }
+    open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         getHeaderSection(section: section)
     }
 }
 
 extension Table: UITableViewDataSource {
-    public func numberOfSections(in tableView: UITableView) -> Int { items.count }
+    open func numberOfSections(in tableView: UITableView) -> Int { items.count }
     
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { items[section].items.count }
+    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { items[section].items.count }
     
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = items[indexPath.section].items[indexPath.row]
         guard let cell = dequeueReusableCell(withIdentifier: item.id, for: indexPath) as? TableCell else { fatalError() }
         cell.setup(data: item)
@@ -94,7 +94,7 @@ extension Table: UITableViewDataSource {
         return cell
     }
     
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let myCell = cell as? RoundedCell else { return }
         roundedStyle(cell: myCell, index: indexPath)
     }
@@ -114,7 +114,7 @@ extension Table {
     }
 }
 
-public class TableCell: UITableViewCell {
+open class TableCell: UITableViewCell {
     public var item: Table.I?
     
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -123,15 +123,15 @@ public class TableCell: UITableViewCell {
         configure()
     }
     
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required public init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    public func configure() {}
-    public func setup(data: Any?) {}
+    open func configure() {}
+    open func setup(data: Any?) {}
     
-    public func itemData(data: Any?) -> Any? { return (data as? Table.I)?.data }
+    open func itemData(data: Any?) -> Any? { return (data as? Table.I)?.data }
 }
 
-public class RoundedCell: TableCell {
+open class RoundedCell: TableCell {
     public var box: UIView = {
         let obj = UIView()
         obj.backgroundColor = .secondary
@@ -144,7 +144,7 @@ public class RoundedCell: TableCell {
         return obj
     }()
     
-    public override func configure() {
+    open override func configure() {
         backgroundColor = .clear
         addSubview(box)
         addSubview(line)
@@ -159,7 +159,7 @@ public class RoundedCell: TableCell {
     }
 }
 
-public class TableHeader: UIView {
+open class TableHeader: UIView {
     public var label: UILabel = {
         let obj = UILabel()
         obj.contentMode = .bottomLeft
@@ -172,9 +172,9 @@ public class TableHeader: UIView {
         configure()
     }
     
-    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    public func configure() {
+    open func configure() {
         backgroundColor = .clear
         addSubview(label)
         label.heightAnchor.constraint(equalToConstant: 50).isActive = true
