@@ -1,11 +1,6 @@
 import UIKit
 
 open class Table: UITableView {
-    override init(frame: CGRect, style: UITableView.Style) {
-        super.init(frame: frame, style: style)
-        create()
-    }
-    
     lazy public var refresh: RefreshControl = RefreshControl()
     var items = [S]() //var sorting = [S]()
     
@@ -66,10 +61,6 @@ open class Table: UITableView {
         addRadiusCell(view: cell.box, index: index)
         cell.line.isHidden = index.row == numberOfRows(inSection: index.section) - 1
     }
-    
-    required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 extension Table: UITableViewDelegate {
@@ -111,6 +102,11 @@ extension Table {
             self.items = items
             self.kind = kind
         }
+        
+        init(name: String?, items: [Table.I]) {
+            self.name = name
+            self.items = items
+        }
     }
     
     public struct I {
@@ -123,6 +119,15 @@ extension Table {
             self.data = data
             self.kind = kind
         }
+        
+        init(data: Any?) {
+            self.data = data
+        }
+    }
+    
+    convenience init() {
+        self.init()
+        create()
     }
 }
 
