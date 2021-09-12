@@ -42,7 +42,7 @@ open class Table: UITableView {
         return view
     }
     
-    func getHeightHeaderSection(section: Int) -> CGFloat {
+    public func getHeightHeaderSection(section: Int) -> CGFloat {
         let sectionName = items[section].name
         return sectionName == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
