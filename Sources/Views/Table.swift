@@ -103,14 +103,26 @@ extension Table: UITableViewDataSource {
 extension Table {
     public struct S {
         var name: String?
-        var items = [Table.I]()
+        var items: [Table.I] = []
         var kind: Any?
+        
+        init(name: String?, items: [Table.I], kind: Any?) {
+            self.name = name
+            self.items = items
+            self.kind = kind
+        }
     }
     
     public struct I {
-        var id = "main"
+        var id: String = "main"
         var data: Any?
         var kind: Any?
+        
+        init(id: String, data: Any?, kind: Any?) {
+            self.id = id
+            self.data = data
+            self.kind = kind
+        }
     }
 }
 
