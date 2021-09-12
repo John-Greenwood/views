@@ -1,15 +1,13 @@
 import UIKit
 
-public class Slider: UIControl {
+open class Slider: UIControl {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configure()
-        
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func configure() {
