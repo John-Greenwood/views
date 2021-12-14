@@ -104,12 +104,33 @@ extension Table {
         var name: String?
         var items: [Item] = []
         var kind: Any?
+        
+        public init(name: String?, items: [Table.Item], kind: Any?) {
+            self.name = name
+            self.items = items
+            self.kind = kind
+        }
+        
+        public init(name: String?, items: [Table.Item]) {
+            self.name = name
+            self.items = items
+        }
     }
     
     public struct Item {
         var id: String
         var data: Any?
         var kind: Any?
+        
+        public init(id: String, data: Any?, kind: Any?) {
+            self.id = id
+            self.data = data
+            self.kind = kind
+        }
+        
+        public init(data: Any?) {
+            self.data = data
+        }
     }
 }
 
