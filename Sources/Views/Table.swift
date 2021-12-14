@@ -6,18 +6,7 @@ open class Table: UITableView {
         create()
     }
     
-    required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    lazy public var refresh: RefreshControl = RefreshControl()
-    var items = [S]() //var sorting = [S]()
-    
-    @discardableResult public
-    func items(_ items: [S]) -> Self {
-        self.items = items
-        return self
-    }
+    var items: [Section] = []
     
     func create() {
         configure()
@@ -26,11 +15,26 @@ open class Table: UITableView {
         dataSource = self
     }
     
-    open func configure() {}
+    open func configure() { }
+    open func configure(cell: TableCell, index: IndexPath) { }
     
-    func cellSetup(cell: TableCell, index: IndexPath) { }
+    func item(index: IndexPath) -> Any? {
+        guard let section = items[safe: index.section]?.items,
+              let item = section[safe: index.row] else { return nil }
+        return item.data
+    }
     
-    func getCell(index: IndexPath) -> TableCell? {
+    @discardableResult public
+    func items(_ items: [Section]) -> Self {
+        self.items = items
+        return self
+    }
+    
+    required public init?(coder: NSCoder) { nil }
+}
+
+extension Table {
+    func cell(index: IndexPath) -> TableCell? {
         guard let cell = cellForRow(at: index) as? TableCell else {
             reloadRows(at: [index], with: .automatic)
             return nil
@@ -49,12 +53,6 @@ open class Table: UITableView {
     public func getHeightHeaderSection(section: Int) -> CGFloat {
         let sectionName = items[section].name
         return sectionName == nil ? .leastNormalMagnitude : UITableView.automaticDimension
-    }
-    
-    func getItem(index: IndexPath) -> Any? {
-        guard let items = items[safe: index.section]?.items else { return nil }
-        guard let item = items[safe: index.row] else { return nil }
-        return item.data
     }
     
     func addRadiusCell(view: UIView, index: IndexPath) {
@@ -89,8 +87,9 @@ extension Table: UITableViewDataSource {
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = items[indexPath.section].items[indexPath.row]
         guard let cell = dequeueReusableCell(withIdentifier: item.id, for: indexPath) as? TableCell else { fatalError() }
-        cell.setup(data: item)
-        cellSetup(cell: cell, index: indexPath)
+        cell.item = item
+        configure(cell: cell, index: indexPath)
+        cell.configure(data: item)
         return cell
     }
     
@@ -101,42 +100,21 @@ extension Table: UITableViewDataSource {
 }
 
 extension Table {
-    public struct S {
+    public struct Section {
         var name: String?
-        var items: [Table.I] = []
+        var items: [Item] = []
         var kind: Any?
-        
-        public init(name: String?, items: [Table.I], kind: Any?) {
-            self.name = name
-            self.items = items
-            self.kind = kind
-        }
-        
-        public init(name: String?, items: [Table.I]) {
-            self.name = name
-            self.items = items
-        }
     }
     
-    public struct I {
-        var id: String = "main"
+    public struct Item {
+        var id: String
         var data: Any?
         var kind: Any?
-        
-        public init(id: String, data: Any?, kind: Any?) {
-            self.id = id
-            self.data = data
-            self.kind = kind
-        }
-        
-        public init(data: Any?) {
-            self.data = data
-        }
     }
 }
 
 open class TableCell: UITableViewCell {
-    public var item: Table.I?
+    public var item: Table.Item?
     
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -147,9 +125,7 @@ open class TableCell: UITableViewCell {
     required public init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     open func configure() {}
-    open func setup(data: Any?) {}
-    
-    open func itemData(data: Any?) -> Any? { return (data as? Table.I)?.data }
+    open func configure(data: Any?) {}
 }
 
 open class RoundedCell: TableCell {

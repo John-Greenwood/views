@@ -40,9 +40,7 @@ public class RefreshControl: UIRefreshControl {
         indicator.center.y = 30
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required public init?(coder: NSCoder) { nil }
 }
 
 extension RefreshControl {
