@@ -89,7 +89,7 @@ extension Table: UITableViewDataSource {
         guard let cell = dequeueReusableCell(withIdentifier: item.id, for: indexPath) as? TableCell else { fatalError() }
         cell.item = item
         configure(cell: cell, index: indexPath)
-        cell.configure(data: item)
+        cell.configure(data: item.data)
         return cell
     }
     

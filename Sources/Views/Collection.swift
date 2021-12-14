@@ -47,7 +47,7 @@ extension Collection: UICollectionViewDataSource {
               let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.id, for: indexPath) as? CollectionCell else { fatalError() }
         cell.item = item
         configure(cell: cell, index: indexPath)
-        cell.configure(data: item)
+        cell.configure(data: item.data)
         return cell
     }
 }
