@@ -54,15 +54,15 @@ extension Collection: UICollectionViewDataSource {
 
 extension Collection {
     public struct Section {
-        var name: String?
-        var items: [Item] = []
-        var kind: Any?
+        public var name: String?
+        public var items: [Item] = []
+        public var kind: Any?
     }
     
     public struct Item {
-        var id: String
-        var data: Any?
-        var kind: Any?
+        public var id: String
+        public var data: Any?
+        public var kind: Any?
     }
 }
 
