@@ -80,7 +80,7 @@ open class Layout: UICollectionViewFlowLayout {
 }
 
 open class CollectionCell: UICollectionViewCell {
-    var item: Collection.Item?
+    public var item: Collection.Item?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
