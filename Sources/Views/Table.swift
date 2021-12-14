@@ -118,7 +118,7 @@ extension Table {
     }
     
     public struct Item {
-        var id: String
+        var id: String = ""
         var data: Any?
         var kind: Any?
         
