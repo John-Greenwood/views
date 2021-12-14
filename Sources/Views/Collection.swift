@@ -57,12 +57,24 @@ extension Collection {
         public var name: String?
         public var items: [Item] = []
         public var kind: Any?
+        
+        public init(name: String? = nil, items: [Item] = [], kind: Any? = nil) {
+            self.name = name
+            self.items = items
+            self.kind = kind
+        }
     }
     
     public struct Item {
         public var id: String
         public var data: Any?
         public var kind: Any?
+        
+        public init(id: String = "", data: Any? = nil, kind: Any? = nil) {
+            self.id = id
+            self.data = data
+            self.kind = kind
+        }
     }
 }
 

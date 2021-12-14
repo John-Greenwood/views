@@ -105,15 +105,10 @@ extension Table {
         var items: [Item] = []
         var kind: Any?
         
-        public init(name: String?, items: [Table.Item], kind: Any?) {
+        public init(name: String? = nil, items: [Table.Item] = [], kind: Any? = nil) {
             self.name = name
             self.items = items
             self.kind = kind
-        }
-        
-        public init(name: String?, items: [Table.Item]) {
-            self.name = name
-            self.items = items
         }
     }
     
@@ -122,14 +117,10 @@ extension Table {
         var data: Any?
         var kind: Any?
         
-        public init(id: String, data: Any?, kind: Any?) {
+        public init(id: String = "", data: Any? = nil, kind: Any? = nil) {
             self.id = id
             self.data = data
             self.kind = kind
-        }
-        
-        public init(data: Any?) {
-            self.data = data
         }
     }
 }
