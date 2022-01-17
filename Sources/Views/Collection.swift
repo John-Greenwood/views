@@ -6,7 +6,7 @@ open class Collection: UICollectionView {
         create()
     }
     
-    var items: [Section] = []
+    public var items: [Section] = []
     
     func create() {
         configure()

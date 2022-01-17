@@ -6,7 +6,7 @@ open class Table: UITableView {
         create()
     }
     
-    var items: [Section] = []
+    public var items: [Section] = []
     
     func create() {
         configure()
@@ -42,11 +42,10 @@ extension Table {
         return cell
     }
     
-    func getHeaderSection(section: Int, fontSize: CGFloat? = nil) -> TableHeader? {
+    public func header(section: Int) -> UIView? {
         guard let sectionName = items[section].name else { return nil }
         let view = TableHeader()
         view.label.text = sectionName
-        if let fontSize = fontSize { view.label.font = .systemFont(ofSize: fontSize)}
         return view
     }
     
@@ -55,7 +54,7 @@ extension Table {
         return sectionName == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
     
-    func addRadiusCell(view: UIView, index: IndexPath) {
+    func radius(view: UIView, index: IndexPath) {
         let count = numberOfRows(inSection: index.section)
         if count > 1 {
             if index.row == 0 || index.row == count - 1 {
@@ -65,7 +64,7 @@ extension Table {
     }
     
     func roundedStyle(cell: RoundedCell, index: IndexPath) {
-        addRadiusCell(view: cell.box, index: index)
+        radius(view: cell.box, index: index)
         cell.line.isHidden = index.row == numberOfRows(inSection: index.section) - 1
     }
 }
@@ -75,7 +74,7 @@ extension Table: UITableViewDelegate {
     open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { .leastNormalMagnitude }
     open func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat { .leastNormalMagnitude }
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        getHeaderSection(section: section)
+        header(section: section)
     }
 }
 
