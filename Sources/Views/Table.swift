@@ -42,7 +42,7 @@ extension Table {
         return cell
     }
     
-    public func header(section: Int) -> UIView? {
+    open func header(section: Int) -> UIView? {
         guard let sectionName = items[section].name else { return nil }
         let view = TableHeader()
         view.label.text = sectionName
