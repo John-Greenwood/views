@@ -31,6 +31,13 @@ open class Table: UITableView {
     }
     
     required public init?(coder: NSCoder) { nil }
+    
+    open func header(section: Int) -> UIView? {
+        guard let sectionName = items[section].name else { return nil }
+        let view = TableHeader()
+        view.label.text = sectionName
+        return view
+    }
 }
 
 extension Table {
@@ -40,13 +47,6 @@ extension Table {
             return nil
         }
         return cell
-    }
-    
-    open func header(section: Int) -> UIView? {
-        guard let sectionName = items[section].name else { return nil }
-        let view = TableHeader()
-        view.label.text = sectionName
-        return view
     }
     
     public func getHeightHeaderSection(section: Int) -> CGFloat {
