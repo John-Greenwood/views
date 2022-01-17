@@ -33,9 +33,9 @@ open class Table: UITableView {
     required public init?(coder: NSCoder) { nil }
     
     open func header(section: Int) -> UIView? {
-        guard let sectionName = items[section].name else { return nil }
+        guard let title = items[section].name else { return nil }
         let view = TableHeader()
-        view.label.text = sectionName
+        view.label.text = title
         return view
     }
 }
@@ -100,9 +100,9 @@ extension Table: UITableViewDataSource {
 
 extension Table {
     public struct Section {
-        var name: String?
-        var items: [Item] = []
-        var kind: Any?
+        public var name: String?
+        public var items: [Item] = []
+        public var kind: Any?
         
         public init(name: String? = nil, items: [Table.Item] = [], kind: Any? = nil) {
             self.name = name
@@ -112,9 +112,9 @@ extension Table {
     }
     
     public struct Item {
-        var id: String = ""
-        var data: Any?
-        var kind: Any?
+        public var id: String = ""
+        public var data: Any?
+        public var kind: Any?
         
         public init(id: String = "", data: Any? = nil, kind: Any? = nil) {
             self.id = id
