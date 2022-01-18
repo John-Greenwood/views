@@ -6,7 +6,7 @@ open class Table: UITableView {
         create()
     }
     
-    public var items: [Section] = []
+    public var sections: [Section] = []
     
     func create() {
         configure()
@@ -19,21 +19,21 @@ open class Table: UITableView {
     open func configure(cell: TableCell, index: IndexPath) { }
     
     func item(index: IndexPath) -> Any? {
-        guard let section = items[safe: index.section]?.items,
+        guard let section = sections[safe: index.section]?.items,
               let item = section[safe: index.row] else { return nil }
         return item.data
     }
     
     @discardableResult public
-    func items(_ items: [Section]) -> Self {
-        self.items = items
+    func items(_ sections: [Section]) -> Self {
+        self.sections = sections
         return self
     }
     
     required public init?(coder: NSCoder) { nil }
     
     open func header(section: Int) -> UIView? {
-        guard let title = items[section].name else { return nil }
+        guard let title = sections[section].name else { return nil }
         let view = TableHeader()
         view.label.text = title
         return view
@@ -41,16 +41,16 @@ open class Table: UITableView {
 }
 
 extension Table {
-    func cell(index: IndexPath) -> TableCell? {
-        guard let cell = cellForRow(at: index) as? TableCell else {
-            reloadRows(at: [index], with: .automatic)
+    public func cell(_ indexPath: IndexPath) -> TableCell? {
+        guard let cell = cellForRow(at: indexPath) as? TableCell else {
+            reloadRows(at: [indexPath], with: .automatic)
             return nil
         }
         return cell
     }
     
     public func getHeightHeaderSection(section: Int) -> CGFloat {
-        let sectionName = items[section].name
+        let sectionName = sections[section].name
         return sectionName == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
     
@@ -79,12 +79,12 @@ extension Table: UITableViewDelegate {
 }
 
 extension Table: UITableViewDataSource {
-    open func numberOfSections(in tableView: UITableView) -> Int { items.count }
+    open func numberOfSections(in tableView: UITableView) -> Int { sections.count }
     
-    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { items[section].items.count }
+    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { sections[section].items.count }
     
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = items[indexPath.section].items[indexPath.row]
+        let item = sections[indexPath.section].items[indexPath.row]
         guard let cell = dequeueReusableCell(withIdentifier: item.id, for: indexPath) as? TableCell else { fatalError() }
         cell.item = item
         configure(cell: cell, index: indexPath)

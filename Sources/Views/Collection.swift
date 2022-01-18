@@ -6,7 +6,7 @@ open class Collection: UICollectionView {
         create()
     }
     
-    public var items: [Section] = []
+    public var sections: [Section] = []
     
     func create() {
         configure()
@@ -19,18 +19,24 @@ open class Collection: UICollectionView {
     open func configure(cell: CollectionCell, index: IndexPath) { }
     
     func item(index: IndexPath) -> Any? {
-        guard let section = items[safe: index.section]?.items,
+        guard let section = sections[safe: index.section]?.items,
               let item = section[safe: index.row] else { return nil }
         return item.data
     }
     
     @discardableResult public
-    func items(_ items: [Section]) -> Self {
-        self.items = items
+    func sections(_ sections: [Section]) -> Self {
+        self.sections = sections
         return self
     }
     
     required public init?(coder: NSCoder) { nil }
+}
+
+extension Collection {
+    func cell(_ indexPath: IndexPath) -> CollectionCell? {
+        cellForItem(at: indexPath) as? CollectionCell
+    }
 }
 
 extension Collection: UICollectionViewDelegate {
@@ -39,11 +45,11 @@ extension Collection: UICollectionViewDelegate {
 
 extension Collection: UICollectionViewDataSource {
     open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        items[safe: section]?.items.count ?? 0
+        sections[safe: section]?.items.count ?? 0
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let item = items[safe: indexPath.section]?.items[safe: indexPath.row],
+        guard let item = sections[safe: indexPath.section]?.items[safe: indexPath.row],
               let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.id, for: indexPath) as? CollectionCell else { fatalError() }
         cell.item = item
         configure(cell: cell, index: indexPath)
