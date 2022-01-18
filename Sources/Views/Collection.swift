@@ -34,7 +34,7 @@ open class Collection: UICollectionView {
 }
 
 extension Collection {
-    func cell(_ indexPath: IndexPath) -> CollectionCell? {
+    public func cell(_ indexPath: IndexPath) -> CollectionCell? {
         cellForItem(at: indexPath) as? CollectionCell
     }
 }
