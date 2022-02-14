@@ -102,24 +102,20 @@ extension Table {
     public struct Section {
         public var name: String?
         public var items: [Item] = []
-        public var kind: Any?
         
-        public init(name: String? = nil, items: [Table.Item] = [], kind: Any? = nil) {
+        public init(name: String? = nil, items: [Table.Item] = []) {
             self.name = name
             self.items = items
-            self.kind = kind
         }
     }
     
     public struct Item {
         public var id: String = ""
         public var data: Any?
-        public var kind: Any?
         
-        public init(id: String = "", data: Any? = nil, kind: Any? = nil) {
+        public init(id: String = "", data: Any? = nil) {
             self.id = id
             self.data = data
-            self.kind = kind
         }
     }
 }
@@ -131,6 +127,9 @@ open class TableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         configure()
+        if #available(macCatalyst 15.0, iOS 15.0, *) {
+            sectionHeaderTopPadding = 0
+        }
     }
     
     required public init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
