@@ -9,10 +9,10 @@ open class Collection: UICollectionView {
     public var sections: [Section] = []
     
     func create() {
-        configure()
-        backgroundColor = .clear
         delegate = self
         dataSource = self
+        backgroundColor = .clear
+        configure()
     }
     
     open func configure() { }

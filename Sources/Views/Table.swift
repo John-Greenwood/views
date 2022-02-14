@@ -9,10 +9,13 @@ open class Table: UITableView {
     public var sections: [Section] = []
     
     func create() {
-        configure()
-        backgroundColor = .clear
         delegate = self
         dataSource = self
+        backgroundColor = .clear
+        if #available(macCatalyst 15.0, iOS 15.0, *) {
+            sectionHeaderTopPadding = 0
+        }
+        configure()
     }
     
     open func configure() { }
@@ -127,9 +130,6 @@ open class TableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         configure()
-        if #available(macCatalyst 15.0, iOS 15.0, *) {
-            sectionHeaderTopPadding = 0
-        }
     }
     
     required public init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
