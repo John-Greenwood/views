@@ -20,41 +20,18 @@ open class Table: UITableView {
     
     open func configure() { }
     open func configure(cell: TableCell, index: IndexPath) { }
-    
-    func item(index: IndexPath) -> Any? {
-        guard let section = sections[safe: index.section]?.items,
-              let item = section[safe: index.row] else { return nil }
-        return item.data
-    }
-    
-    @discardableResult public
-    func items(_ sections: [Section]) -> Self {
-        self.sections = sections
-        return self
-    }
+    open func display(cell: TableCell, index: IndexPath) { }
     
     required public init?(coder: NSCoder) { nil }
-    
-    open func header(section: Int) -> UIView? {
-        guard let title = sections[section].name else { return nil }
-        let view = TableHeader()
-        view.label.text = title
-        return view
-    }
 }
 
 extension Table {
-    public func cell(_ indexPath: IndexPath) -> TableCell? {
-        guard let cell = cellForRow(at: indexPath) as? TableCell else {
-            reloadRows(at: [indexPath], with: .automatic)
-            return nil
-        }
-        return cell
+    public func headerHeight(section: Int) -> CGFloat {
+        sections[section].header == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
     
-    public func getHeightHeaderSection(section: Int) -> CGFloat {
-        let sectionName = sections[section].name
-        return sectionName == nil ? .leastNormalMagnitude : UITableView.automaticDimension
+    public func footerHeight(section: Int) -> CGFloat {
+        sections[section].footer == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
     
     func radius(view: UIView, index: IndexPath) {
@@ -73,11 +50,19 @@ extension Table {
 }
 
 extension Table: UITableViewDelegate {
-    open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { .leastNormalMagnitude }
-    open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { .leastNormalMagnitude }
-    open func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat { .leastNormalMagnitude }
+    open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { headerHeight(section: section) }
+    open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { footerHeight(section: section) }
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        header(section: section)
+        let item = sections[section]
+        guard let header = item.header, let view = dequeueReusableHeaderFooterView(withIdentifier: header) as? TableHeader else { return nil }
+        view.configure(data: item.data)
+        return view
+    }
+    open func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let item = sections[section]
+        guard let footer = item.footer, let view = dequeueReusableHeaderFooterView(withIdentifier: footer) as? TableFooter else { return nil }
+        view.configure(data: item.data)
+        return view
     }
 }
 
@@ -89,50 +74,83 @@ extension Table: UITableViewDataSource {
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = sections[indexPath.section].items[indexPath.row]
         guard let cell = dequeueReusableCell(withIdentifier: item.id, for: indexPath) as? TableCell else { fatalError() }
-        cell.item = item
         configure(cell: cell, index: indexPath)
         cell.configure(data: item.data)
         return cell
     }
     
     open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let myCell = cell as? RoundedCell else { return }
-        roundedStyle(cell: myCell, index: indexPath)
+        guard let cell = cell as? TableCell else { return }
+        display(cell: cell, index: indexPath)
+        cell.display()
     }
 }
 
 extension Table {
     public struct Section {
-        public var name: String?
+        public var data: Any?
         public var items: [Item] = []
+        public var header: String?
+        public var footer: String?
         
-        public init(name: String? = nil, items: [Table.Item] = []) {
-            self.name = name
+        public init(data: Any? = nil, items: [Table.Item] = [], header: String? = nil, footer: String? = nil) {
+            self.data = data
             self.items = items
+            self.header = header
+            self.footer = footer
         }
     }
     
     public struct Item {
-        public var id: String = ""
         public var data: Any?
+        public var id: String = ""
         
-        public init(id: String = "", data: Any? = nil) {
-            self.id = id
+        public init(data: Any? = nil, id: String = "") {
             self.data = data
+            self.id = id
         }
     }
 }
 
 open class TableCell: UITableViewCell {
-    public var item: Table.Item?
-    
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
+        backgroundColor = .clear
         configure()
     }
     
     required public init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    open func configure() { }
+    open func configure(data: Any?) { }
+    open func display() { }
+}
+
+public extension TableCell {
+    var table: UITableView? { superview as? UITableView }
+    var index: IndexPath? { table?.indexPath(for: self) }
+}
+
+open class TableHeader: UITableViewHeaderFooterView {
+    override public init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        configure()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    open func configure() {}
+    open func configure(data: Any?) {}
+}
+
+open class TableFooter: UITableViewHeaderFooterView {
+    override public init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        configure()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     open func configure() {}
     open func configure(data: Any?) {}
@@ -165,33 +183,6 @@ open class RoundedCell: TableCell {
         line.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         line.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32).isActive = true
         line.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-    }
-}
-
-open class TableHeader: UIView {
-    public var label: UILabel = {
-        let obj = UILabel()
-        obj.contentMode = .bottomLeft
-        obj.font = .systemFont(ofSize: 16)
-        return obj
-    }()
-    
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
-        configure()
-    }
-    
-    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
-    open func configure() {
-        backgroundColor = .clear
-        addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        label.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
     }
 }
 
