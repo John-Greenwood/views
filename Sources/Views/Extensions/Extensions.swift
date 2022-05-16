@@ -22,4 +22,9 @@ extension UIColor {
         if #available(iOS 13.0, *) { return .separator }
         return .lightGray
     }
+    
+    class var background: UIColor {
+        if #available(iOS 13.0, *) { return .systemBackground }
+        return .white
+    }
 }

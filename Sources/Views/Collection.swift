@@ -44,6 +44,10 @@ extension Collection: UICollectionViewDelegate {
 }
 
 extension Collection: UICollectionViewDataSource {
+    open func numberOfSections(in collectionView: UICollectionView) -> Int {
+        sections.count
+    }
+    
     open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         sections[safe: section]?.items.count ?? 0
     }
@@ -60,12 +64,16 @@ extension Collection: UICollectionViewDataSource {
 
 extension Collection {
     public struct Section {
-        public var name: String?
+        public var data: (header: Any?, footer: Any?)?
         public var items: [Item] = []
+        public var header: String?
+        public var footer: String?
         
-        public init(name: String? = nil, items: [Item] = []) {
-            self.name = name
+        public init(data: (header: Any?, footer: Any?)? = nil, items: [Item] = [], header: String? = nil, footer: String? = nil) {
+            self.data = data
             self.items = items
+            self.header = header
+            self.footer = footer
         }
     }
     
@@ -94,6 +102,20 @@ open class Layout: UICollectionViewFlowLayout {
 }
 
 open class CollectionCell: UICollectionViewCell {
+    public var item: Collection.Item?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+    }
+    
+    required public init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    open func configure() { }
+    open func configure(data: Any?) { }
+}
+
+open class CollectionHeader: UICollectionReusableView {
     public var item: Collection.Item?
     
     override init(frame: CGRect) {
