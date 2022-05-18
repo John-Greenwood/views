@@ -8,8 +8,8 @@ open class TableHeader: UITableViewHeaderFooterView {
     
     required public init?(coder aDecoder: NSCoder) { nil }
     
-    open func configure() {}
-    open func configure(data: Any?) {}
+    open func configure() { }
+    open func configure(data: Any?) { }
 }
 
 open class RoundedHeader: TableHeader {
@@ -26,7 +26,30 @@ open class RoundedHeader: TableHeader {
     }
 }
 
-open class ExpandableHeader: RoundedHeader {
+open class ExpandableHeader: TableHeader {
+    open var button = UIButton()
+    
+    open override func configure() {
+        super.configure()
+        addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        button.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        button.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+    }
+    
+    open func hide(_ closure: @escaping () -> Void) {
+        let action = Action(closure)
+        button.addTarget(action, action: #selector(Action.action), for: .touchUpInside)
+        Associated(self).set(action, .hashable(self), .OBJC_ASSOCIATION_RETAIN)
+    }
+    
+    open func update() { }
+}
+
+open class ExpandableRoundedHeader: RoundedHeader {
     open var button = UIButton()
     
     open override func configure() {
@@ -40,9 +63,11 @@ open class ExpandableHeader: RoundedHeader {
         button.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
     }
     
-    open func expand(_ closure: @escaping () -> Void) {
+    open func hide(_ closure: @escaping () -> Void) {
         let action = Action(closure)
         button.addTarget(action, action: #selector(Action.action), for: .touchUpInside)
         Associated(self).set(action, .hashable(self), .OBJC_ASSOCIATION_RETAIN)
     }
+    
+    open func update() { }
 }

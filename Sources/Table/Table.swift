@@ -35,7 +35,10 @@ open class Table: UITableView {
             round(header: header, section: section)
         }
         if let header = header as? ExpandableHeader {
-            header.expand { [weak self] in self?.hide(section: section) }
+            header.hide { [weak self] in self?.hide(section: section) }
+        }
+        if let header = header as? ExpandableRoundedHeader {
+            header.hide { [weak self] in self?.hide(section: section) }
         }
         header.configure(data: data)
         return header
@@ -45,7 +48,10 @@ open class Table: UITableView {
             round(footer: footer, section: section)
         }
         if let footer = footer as? ExpandableFooter {
-            footer.expand { [weak self] in self?.hide(section: section) }
+            footer.hide { [weak self] in self?.hide(section: section) }
+        }
+        if let footer = footer as? ExpandableRoundedFooter {
+            footer.hide { [weak self] in self?.hide(section: section) }
         }
         footer.configure(data: data)
         return footer
