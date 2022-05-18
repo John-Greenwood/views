@@ -115,11 +115,13 @@ open class Table: UITableView {
     }
     
     open func hide(section: Int) {
+        let contains = invisible.contains(section)
+        
         var indexPaths: [IndexPath] {
             sections[section].items.enumerated().map { i, item in IndexPath(row: i, section: section) }
         }
         
-        if invisible.contains(section) {
+        if contains {
             invisible.remove(section)
             insertRows(at: indexPaths, with: .fade)
         } else {
@@ -127,12 +129,20 @@ open class Table: UITableView {
             deleteRows(at: indexPaths, with: .fade)
         }
         
-        if let header = headerView(forSection: section) as? RoundedHeader {
-            round(header: header, section: section)
+        if let header = headerView(forSection: section) {
+            if let header = header as? RoundedHeader {
+                round(header: header, section: section)
+            }
+            (header as? ExpandableHeader)?.update(hidden: contains)
+            (header as? ExpandableRoundedHeader)?.update(hidden: contains)
         }
         
-        if let footer = footerView(forSection: section) as? RoundedFooter {
-            round(footer: footer, section: section)
+        if let footer = footerView(forSection: section) {
+            if let footer = footer as? RoundedFooter {
+                round(footer: footer, section: section)
+            }
+            (footer as? ExpandableFooter)?.update(hidden: contains)
+            (footer as? ExpandableRoundedFooter)?.update(hidden: contains)
         }
     }
     
