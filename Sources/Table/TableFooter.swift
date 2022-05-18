@@ -25,3 +25,24 @@ open class RoundedFooter: TableFooter {
         content.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
     }
 }
+
+open class ExpandableFooter: RoundedFooter {
+    open var button = UIButton()
+    
+    open override func configure() {
+        super.configure()
+        addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.topAnchor.constraint(equalTo: content.topAnchor).isActive = true
+        button.bottomAnchor.constraint(equalTo: content.bottomAnchor).isActive = true
+        button.leadingAnchor.constraint(equalTo: content.leadingAnchor).isActive = true
+        button.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
+    }
+    
+    open func expand(_ closure: @escaping () -> Void) {
+        let action = Action(closure)
+        button.addTarget(action, action: #selector(Action.action), for: .touchUpInside)
+        Associated(self).set(action, .hashable(self), .OBJC_ASSOCIATION_RETAIN)
+    }
+}

@@ -7,6 +7,7 @@ open class Table: UITableView {
     }
     
     open var sections: [Section] = []
+    open var invisible: Set<Int> = []
     
     open func create() {
         delegate = self
@@ -27,29 +28,21 @@ open class Table: UITableView {
         cell.display()
     }
     open func configure(header: TableHeader, data: Any?, section: Int) -> TableHeader? {
-        if let view = header as? RoundedHeader {
-            let item = sections[section]
-            if item.items.count > 0 {
-                view.content.radius(corners: .top, value: 12)
-            } else if item.footer != nil {
-                view.content.radius(corners: .top, value: 12)
-            } else {
-                view.content.radius(corners: .all, value: 12)
-            }
+        if let header = header as? RoundedHeader {
+            round(header: header, section: section)
+        }
+        if let header = header as? ExpandableHeader {
+            header.expand { [weak self] in self?.hide(section: section) }
         }
         header.configure(data: data)
         return header
     }
     open func configure(footer: TableFooter, data: Any?, section: Int) -> TableFooter? {
-        if let view = footer as? RoundedFooter {
-            let item = sections[section]
-            if item.items.count > 0 {
-                view.content.radius(corners: .bottom, value: 12)
-            } else if item.header != nil {
-                view.content.radius(corners: .bottom, value: 12)
-            } else {
-                view.content.radius(corners: .all, value: 12)
-            }
+        if let footer = footer as? RoundedFooter {
+            round(footer: footer, section: section)
+        }
+        if let footer = footer as? ExpandableFooter {
+            footer.expand { [weak self] in self?.hide(section: section) }
         }
         footer.configure(data: data)
         return footer
@@ -81,6 +74,54 @@ open class Table: UITableView {
         cell.line.isHidden = last
         
         view.radius(corners: corners)
+    }
+    
+    open func round(header: RoundedHeader, section: Int) {
+        let item = sections[section]
+        if item.footer != nil {
+            header.content.radius(corners: .top, value: 12)
+        } else if invisible.contains(section) {
+            header.content.radius(corners: .all, value: 12)
+        } else if item.items.count > 0 {
+            header.content.radius(corners: .top, value: 12)
+        } else {
+            header.content.radius(corners: .all, value: 12)
+        }
+    }
+    
+    open func round(footer: RoundedFooter, section: Int) {
+        let item = sections[section]
+        if item.header != nil {
+            footer.content.radius(corners: .bottom, value: 12)
+        } else if invisible.contains(section) {
+            footer.content.radius(corners: .all, value: 12)
+        } else if item.items.count > 0 {
+            footer.content.radius(corners: .bottom, value: 12)
+        } else {
+            footer.content.radius(corners: .all, value: 12)
+        }
+    }
+    
+    open func hide(section: Int) {
+        var indexPaths: [IndexPath] {
+            sections[section].items.enumerated().map { i, item in IndexPath(row: i, section: section) }
+        }
+        
+        if invisible.contains(section) {
+            invisible.remove(section)
+            insertRows(at: indexPaths, with: .fade)
+        } else {
+            invisible.insert(section)
+            deleteRows(at: indexPaths, with: .fade)
+        }
+        
+        if let header = headerView(forSection: section) as? RoundedHeader {
+            round(header: header, section: section)
+        }
+        
+        if let footer = footerView(forSection: section) as? RoundedFooter {
+            round(footer: footer, section: section)
+        }
     }
     
     required public init?(coder: NSCoder) { nil }
