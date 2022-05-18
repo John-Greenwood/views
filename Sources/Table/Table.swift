@@ -115,19 +115,19 @@ open class Table: UITableView {
     }
     
     open func hide(section: Int) {
-        let contains = invisible.contains(section)
-        
         var indexPaths: [IndexPath] {
             sections[section].items.enumerated().map { i, item in IndexPath(row: i, section: section) }
         }
         
-        if contains {
+        if invisible.contains(section) {
             invisible.remove(section)
             insertRows(at: indexPaths, with: .fade)
         } else {
             invisible.insert(section)
             deleteRows(at: indexPaths, with: .fade)
         }
+        
+        let contains = invisible.contains(section)
         
         if let header = headerView(forSection: section) {
             if let header = header as? RoundedHeader {
