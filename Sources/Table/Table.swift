@@ -61,10 +61,15 @@ open class Table: UITableView {
         let count = numberOfRows(inSection: indexPath.section)
         let first = indexPath.row == 0
         let last = indexPath.row == count - 1
-        let view = cell.content
         
-        var header: Bool { sections[indexPath.section].header != nil }
-        var footer: Bool { sections[indexPath.section].footer != nil }
+        var header: Bool {
+            guard sections[indexPath.section].header != nil else { return false }
+            return headerView(forSection: indexPath.section) as? RoundedHeader != nil
+        }
+        var footer: Bool {
+            guard sections[indexPath.section].footer != nil else { return false }
+            return footerView(forSection: indexPath.section) as? RoundedFooter != nil
+        }
         
         var corners: Corner = []
         if first && last, !header && !footer {
@@ -76,7 +81,7 @@ open class Table: UITableView {
         }
         cell.line.isHidden = last
         
-        view.radius(corners: corners)
+        cell.content.radius(corners: corners)
     }
     
     open func round(header: RoundedHeader, section: Int) {
