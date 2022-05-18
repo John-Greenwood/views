@@ -25,6 +25,9 @@ open class Table: UITableView {
         return cell
     }
     open func display(cell: TableCell, indexPath: IndexPath) {
+        if let cell = cell as? RoundedCell {
+            round(cell: cell, indexPath: indexPath)
+        }
         cell.display()
     }
     open func configure(header: TableHeader, data: Any?, section: Int) -> TableHeader? {
@@ -145,7 +148,10 @@ extension Table: UITableViewDelegate {
 extension Table: UITableViewDataSource {
     open func numberOfSections(in tableView: UITableView) -> Int { sections.count }
     
-    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { sections[section].items.count }
+    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if invisible.contains(section) { return 0 }
+        return sections[section].items.count
+    }
     
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = sections[indexPath.section].items[indexPath.row]
