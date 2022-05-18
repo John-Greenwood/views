@@ -31,7 +31,6 @@ extension UIView {
 
 private extension UIView {
     @available(iOS 11, *) func radius(corners: CACornerMask, value: CGFloat) {
-        layoutIfNeeded()
         layer.maskedCorners = corners
         layer.cornerRadius = value
     }
