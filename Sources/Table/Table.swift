@@ -31,27 +31,33 @@ open class Table: UITableView {
         cell.display()
     }
     open func configure(header: TableHeader, data: Any?, section: Int) -> TableHeader? {
+        let contains = invisible.contains(section)
         if let header = header as? RoundedHeader {
             round(header: header, section: section)
         }
         if let header = header as? ExpandableHeader {
             header.hide { [weak self] in self?.hide(section: section) }
+            header.update(hidden: contains)
         }
         if let header = header as? ExpandableRoundedHeader {
             header.hide { [weak self] in self?.hide(section: section) }
+            header.update(hidden: contains)
         }
         header.configure(data: data)
         return header
     }
     open func configure(footer: TableFooter, data: Any?, section: Int) -> TableFooter? {
+        let contains = invisible.contains(section)
         if let footer = footer as? RoundedFooter {
             round(footer: footer, section: section)
         }
         if let footer = footer as? ExpandableFooter {
             footer.hide { [weak self] in self?.hide(section: section) }
+            footer.update(hidden: contains)
         }
         if let footer = footer as? ExpandableRoundedFooter {
             footer.hide { [weak self] in self?.hide(section: section) }
+            footer.update(hidden: contains)
         }
         footer.configure(data: data)
         return footer
