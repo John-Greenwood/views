@@ -46,7 +46,7 @@ open class ExpandableHeader: TableHeader {
         Associated(self).set(action, .hashable(self), .OBJC_ASSOCIATION_RETAIN)
     }
     
-    open func update() { }
+    open func update(hidden: Bool) { }
 }
 
 open class ExpandableRoundedHeader: RoundedHeader {
@@ -69,5 +69,5 @@ open class ExpandableRoundedHeader: RoundedHeader {
         Associated(self).set(action, .hashable(self), .OBJC_ASSOCIATION_RETAIN)
     }
     
-    open func update() { }
+    open func update(hidden: Bool) { }
 }

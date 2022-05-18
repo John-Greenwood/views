@@ -46,7 +46,7 @@ open class ExpandableFooter: TableFooter {
         Associated(self).set(action, .hashable(self), .OBJC_ASSOCIATION_RETAIN)
     }
     
-    open func update() { }
+    open func update(hidden: Bool) { }
 }
 
 open class ExpandableRoundedFooter: RoundedFooter {
@@ -69,5 +69,5 @@ open class ExpandableRoundedFooter: RoundedFooter {
         Associated(self).set(action, .hashable(self), .OBJC_ASSOCIATION_RETAIN)
     }
     
-    open func update() { }
+    open func update(hidden: Bool) { }
 }

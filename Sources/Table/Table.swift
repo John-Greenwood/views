@@ -68,13 +68,11 @@ open class Table: UITableView {
         let first = indexPath.row == 0
         let last = indexPath.row == count - 1
         
-        var header: Bool {
-            guard sections[indexPath.section].header != nil else { return false }
-            return headerView(forSection: indexPath.section) as? RoundedHeader != nil
-        }
-        var footer: Bool {
-            guard sections[indexPath.section].footer != nil else { return false }
-            return footerView(forSection: indexPath.section) as? RoundedFooter != nil
+        var header: Bool { view(sections[indexPath.section].header) != nil }
+        var footer: Bool { view(sections[indexPath.section].footer) != nil }
+        func view(_ identifier: String?) -> UITableViewHeaderFooterView? {
+            guard let identifier = identifier else { return nil }
+            return dequeueReusableHeaderFooterView(withIdentifier: identifier)
         }
         
         var corners: Corner = []
