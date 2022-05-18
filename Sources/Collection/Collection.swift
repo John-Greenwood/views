@@ -1,5 +1,4 @@
 import UIKit
-import Views
 
 open class Collection: UICollectionView {
     override public init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
