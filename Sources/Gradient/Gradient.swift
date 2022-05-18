@@ -6,7 +6,6 @@ public class Gradient: CAGradientLayer {
         colors = value.map { $0.cgColor }
         return self
     }
-    //degrees
     @discardableResult public
     func angle(_ degrees: CGFloat) -> Self {
         var ang = (-degrees).truncatingRemainder(dividingBy: 360)+90

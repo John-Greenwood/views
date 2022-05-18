@@ -6,7 +6,7 @@ open class TableFooter: UITableViewHeaderFooterView {
         configure()
     }
     
-    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required public init?(coder aDecoder: NSCoder) { nil }
     
     open func configure() {}
     open func configure(data: Any?) {}

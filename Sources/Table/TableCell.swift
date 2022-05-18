@@ -8,7 +8,7 @@ open class TableCell: UITableViewCell {
         configure()
     }
     
-    required public init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required public init?(coder: NSCoder) { nil }
     
     open func configure() { }
     open func configure(data: Any?) { }
@@ -35,8 +35,6 @@ open class RoundedCell: TableCell {
         line.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32).isActive = true
         line.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32).isActive = true
         
-        content.backgroundColor = .secondary
-        line.backgroundColor = .separators
         line.isHidden = true
     }
 }

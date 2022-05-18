@@ -19,9 +19,41 @@ open class Table: UITableView {
     }
     
     open func configure() { }
-    open func configure(cell: TableCell, indexPath: IndexPath) { }
-    open func display(cell: TableCell, indexPath: IndexPath) { }
-    
+    open func configure(cell: TableCell, item: Item, indexPath: IndexPath) -> TableCell {
+        cell.configure(data: item.data)
+        return cell
+    }
+    open func display(cell: TableCell, indexPath: IndexPath) {
+        cell.display()
+    }
+    open func configure(header: TableHeader, data: Any?, section: Int) -> TableHeader? {
+        if let view = header as? RoundedHeader {
+            let item = sections[section]
+            if item.items.count > 0 {
+                view.content.radius(corners: .top, value: 12)
+            } else if item.footer != nil {
+                view.content.radius(corners: .top, value: 12)
+            } else {
+                view.content.radius(corners: .all, value: 12)
+            }
+        }
+        header.configure(data: data)
+        return header
+    }
+    open func configure(footer: TableFooter, data: Any?, section: Int) -> TableFooter? {
+        if let view = footer as? RoundedFooter {
+            let item = sections[section]
+            if item.items.count > 0 {
+                view.content.radius(corners: .bottom, value: 12)
+            } else if item.header != nil {
+                view.content.radius(corners: .bottom, value: 12)
+            } else {
+                view.content.radius(corners: .all, value: 12)
+            }
+        }
+        footer.configure(data: data)
+        return footer
+    }
     open func headerHeight(section: Int) -> CGFloat {
         sections[section].header == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
@@ -60,32 +92,12 @@ extension Table: UITableViewDelegate {
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let item = sections[section]
         guard let identifier = item.header, let view = dequeueReusableHeaderFooterView(withIdentifier: identifier) as? TableHeader else { return nil }
-        if let view = view as? RoundedHeader {
-            if item.items.count > 0 {
-                view.content.radius(corners: .top, value: 12)
-            } else if item.footer != nil {
-                view.content.radius(corners: .top, value: 12)
-            } else {
-                view.content.radius(corners: .all, value: 12)
-            }
-        }
-        view.configure(data: item.data)
-        return view
+        return configure(header: view, data: item.data, section: section)
     }
     open func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let item = sections[section]
         guard let identifier = item.footer, let view = dequeueReusableHeaderFooterView(withIdentifier: identifier) as? TableFooter else { return nil }
-        if let view = view as? RoundedFooter {
-            if item.items.count > 0 {
-                view.content.radius(corners: .bottom, value: 12)
-            } else if item.header != nil {
-                view.content.radius(corners: .bottom, value: 12)
-            } else {
-                view.content.radius(corners: .all, value: 12)
-            }
-        }
-        view.configure(data: item.data)
-        return view
+        return configure(footer: view, data: item.data, section: section)
     }
 }
 
@@ -97,14 +109,11 @@ extension Table: UITableViewDataSource {
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = sections[indexPath.section].items[indexPath.row]
         guard let cell = dequeueReusableCell(withIdentifier: item.id, for: indexPath) as? TableCell else { fatalError() }
-        configure(cell: cell, indexPath: indexPath)
-        cell.configure(data: item.data)
-        return cell
+        return configure(cell: cell, item: item, indexPath: indexPath)
     }
     
     open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let cell = cell as? TableCell else { return }
         display(cell: cell, indexPath: indexPath)
-        cell.display()
     }
 }
