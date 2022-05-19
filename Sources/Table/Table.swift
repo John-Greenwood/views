@@ -74,8 +74,8 @@ open class Table: UITableView {
         let first = indexPath.row == 0
         let last = indexPath.row == count - 1
         
-        var header: Bool { view(sections[indexPath.section].header) != nil }
-        var footer: Bool { view(sections[indexPath.section].footer) != nil }
+        var header: Bool { view(sections[indexPath.section].header) as? RoundedHeader != nil }
+        var footer: Bool { view(sections[indexPath.section].footer) as? RoundedFooter != nil }
         func view(_ identifier: String?) -> UITableViewHeaderFooterView? {
             guard let identifier = identifier else { return nil }
             return dequeueReusableHeaderFooterView(withIdentifier: identifier)
