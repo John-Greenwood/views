@@ -1,6 +1,6 @@
 import UIKit
 
-open class Table: UITableView {
+open class RZTable: UITableView {
     public override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         create()
@@ -155,7 +155,7 @@ open class Table: UITableView {
     required public init?(coder: NSCoder) { nil }
 }
 
-extension Table: UITableViewDelegate {
+extension RZTable: UITableViewDelegate {
     open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { headerHeight(section: section) }
     open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { footerHeight(section: section) }
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -170,7 +170,7 @@ extension Table: UITableViewDelegate {
     }
 }
 
-extension Table: UITableViewDataSource {
+extension RZTable: UITableViewDataSource {
     open func numberOfSections(in tableView: UITableView) -> Int { sections.count }
     
     open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

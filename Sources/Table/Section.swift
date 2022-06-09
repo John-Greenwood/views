@@ -1,4 +1,4 @@
-extension Table {
+extension RZTable {
     public struct Section {
         public var data: Any?
         public var items: [Item] = []

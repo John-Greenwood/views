@@ -1,4 +1,4 @@
-extension Table {
+extension RZTable {
     public struct Item {
         public var data: Any?
         public var id: String
